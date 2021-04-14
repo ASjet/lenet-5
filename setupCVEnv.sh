@@ -1,4 +1,6 @@
 #!/bin/sh
+sudo apt install python3 python3-pip
+sudo pip3 install numpy
 sudo apt install build-essential cmake git pkg-config -y 
 sudo apt install libjpeg8-dev -y
 sudo apt install libtiff5-dev -y
@@ -11,4 +13,5 @@ git clone git://github.com/opencv/opencv ~/opencv
 mkdir ~/opencv/build
 cd ~/opencv/build
 cmake -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local -D INSTALL_PYTHON_EXAMPLES=ON -D BUILD_EXAMPLES=ON -D CMAKE_SHARED_LINKER_FLAGS='-latomic' -D WITH_LIBV4L=ON ..
+echo "Increase vitual memory by editing /etc/dphys-swapfile"
 echo "build from $HOME/opencv/build"

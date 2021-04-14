@@ -13,5 +13,5 @@ git clone git://github.com/opencv/opencv ~/opencv
 mkdir ~/opencv/build
 cd ~/opencv/build
 cmake -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local -D INSTALL_PYTHON_EXAMPLES=ON -D BUILD_EXAMPLES=ON -D CMAKE_SHARED_LINKER_FLAGS='-latomic' -D WITH_LIBV4L=ON ..
-echo "Increase vitual memory by editing /etc/dphys-swapfile"
+echo "Increase vitual memory by editing /etc/dphys-swapfile CONF_SWAPSIZE=4096"
 echo "build from $HOME/opencv/build"

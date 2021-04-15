@@ -19,8 +19,12 @@ py3_lib_dir=/usr/lib/python3
 # Numpy include directory
 np_include_dir=$HOME/.local/lib/python3.8/site-packages/numpy/core/include
 
+# Threads this CPU has
+thread_num=4
+
 if [ ! -e ./.ENV_FLAG ]
 then
+    touch ./.ENV_FLAG
     sudo apt install python3 python3-pip
     sudo pip3 install numpy
     sudo apt install build-essential cmake git pkg-config -y
@@ -31,18 +35,31 @@ then
     sudo apt install libavcodec-dev libavformat-dev libswscale-dev libv4l-dev -y
     sudo apt install libgtk2.0-dev -y
     sudo apt install libatlas-base-dev gfortran -y
-    touch ./.ENV_FLAG
     echo "========================================================================"
     echo "Warning: Configure may wrong in different target platform"
     echo "Edit variables in setupCVEnv.sh"
     echo "Increase vitual memory by editing /etc/dphys-swapfile CONF_SWAPSIZE=4096"
     echo "Then rerun this script"
-else
+elif [ ! -e ./.BUILD_FLAG ]
+then
+    touch ./.BUILD_FLAG
     git clone git://github.com/opencv/opencv ~/opencv
     mkdir ~/opencv/build
     cd ~/opencv/build
     cmake -D CMAKE_BUILD_TYPE=$build_type -D CMAKE_INSTALL_PREFIX=$cmake_install_dir -D INSTALL_PYTHON_EXAMPLES=ON -D BUILD_EXAMPLES=ON -DCMAKE_SHARED_LINKER_FLAGS='-latomic' -D WITH_LIBV4L=ON PYTHON3_EXECUTABLE=$py3_exe_path PYTHON_INCLUDE_DIR=$py3_include_dir PYTHON_LIBRARY=$py3_lib_dir PYTHON3_NUMPY_INCLUDE_DIRS=$np_include_dir ..
     echo "========================================================================"
-    echo "build from $HOME/opencv/build"
     cat /proc/cpuinfo | grep processor
+    echo "change thread_num in this script"
+    echo "Then rerun this script"
+elif [ ! -e ./.INSTALL_FLAG ]
+then
+    touch ./.INSTALL_FLAG
+    cd ~/opencv/build
+    make -j $thread_num
+    sudo make install
+    echo "Everything Done!"
+    python3 -c "import cv2;print('OpenCV version:',cv2.__version__)"
+else
+    echo "OpenCV had been installed!"
+    python3 -c "import cv2;print('Version:',cv2.__version__)"
 fi

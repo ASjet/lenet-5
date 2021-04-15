@@ -10,21 +10,20 @@ cmake_install_dir=/usr/local
 py3_exec_path=/usr/bin/python3
 
 # Python3 include directory
-py3_include_dir=/usr/include/python3.8
+py3_include_dir=/usr/include/python3.7
 
 # Python3 Library
-# py3_lib_dir=/usr/lib/arm-linux-gnueabihf/libpython3.8m.so
-py3_lib_dir=/usr/lib/python3
+py3_lib_dir=/usr/lib/arm-linux-gnueabihf/libpython3.7m.so
+#py3_lib_dir=/usr/lib/python3
 
 # Numpy include directory
-np_include_dir=$HOME/.local/lib/python3.8/site-packages/numpy/core/include
+np_include_dir=$HOME/.local/lib/python3.7/site-packages/numpy/core/include
 
 # Threads this CPU has
 thread_num=4
 
 if [ ! -e ./.ENV_FLAG ]
 then
-    touch ./.ENV_FLAG
     sudo apt install python3 python3-pip
     sudo pip3 install numpy
     sudo apt install build-essential cmake git pkg-config -y
@@ -48,9 +47,9 @@ then
     echo "<=="
     echo "Increase vitual memory by editing /etc/dphys-swapfile CONF_SWAPSIZE=4096"
     echo "Then rerun this script"
-elif [[ -e ./.ENV_FLAG && ! -e ./.BUILD_FLAG ]]
+    touch ./.ENV_FLAG
+elif [[ -e ./.ENV_FLAG && ! -e ./.CONF_FLAG ]]
 then
-    touch ./.BUILD_FLAG
     git clone git://github.com/opencv/opencv ~/opencv
     mkdir ~/opencv/build
     cd ~/opencv/build
@@ -62,14 +61,15 @@ then
     echo "thread_num=$thread_num"
     echo "<=="
     echo "Then rerun this script"
-elif [[ -e ./.ENV_FLAG && -e ./.BUILD_FLAG && ! -e ./.INSTALL_FLAG ]]
+    touch ./.CONF_FLAG
+elif [[ -e ./.ENV_FLAG && -e ./.CONF_FLAG && ! -e ./.BUILD_FLAG ]]
 then
-    touch ./.INSTALL_FLAG
     cd ~/opencv/build
     make -j $thread_num
     sudo make install
     echo "Everything Done!"
     python3 -c "import cv2;print('OpenCV version:',cv2.__version__)"
+    touch ./.BUILD_FLAG
 else
     echo "OpenCV had been installed!"
     python3 -c "import cv2;print('Version:',cv2.__version__)"

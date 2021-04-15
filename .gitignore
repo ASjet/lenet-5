@@ -1,6 +1,6 @@
 .ENV_FLAG
+.CONF_FLAG
 .BUILD_FLAG
-.INSTALL_FLAG
 .DS_Store
 # Byte-compiled / optimized / DLL files
 __pycache__/

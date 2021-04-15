@@ -44,4 +44,5 @@ else
     cmake -D CMAKE_BUILD_TYPE=$build_type -D CMAKE_INSTALL_PREFIX=$cmake_install_dir -D INSTALL_PYTHON_EXAMPLES=ON -D BUILD_EXAMPLES=ON -DCMAKE_SHARED_LINKER_FLAGS='-latomic' -D WITH_LIBV4L=ON PYTHON3_EXECUTABLE=$py3_exe_path PYTHON_INCLUDE_DIR=$py3_include_dir PYTHON_LIBRARY=$py3_lib_dir PYTHON3_NUMPY_INCLUDE_DIRS=$np_include_dir ..
     echo "========================================================================"
     echo "build from $HOME/opencv/build"
+    cat /proc/cpuinfo | grep processor
 fi

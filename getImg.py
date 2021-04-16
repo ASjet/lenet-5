@@ -17,7 +17,8 @@ if(cap.isOpened() != True):
 while(cap.isOpened()):
     [ret,frame] = cap.read()
     if(ret == True):
-        [ret,prep] = cv2.threshold(frame,64,255,cv2.THRESH_BINARY)
+        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        [ret,prep] = cv2.threshold(frame,80,255,cv2.THRESH_BINARY)
         blurd = cv2.blur(255-prep,(3,3))
         [ret,bin] = cv2.threshold(255-prep, 128,255,cv2.THRESH_BINARY)
 
@@ -25,9 +26,9 @@ while(cap.isOpened()):
         bf = cv2.boxFilter(blurd,-1,(3,3),0)
         [ret,bf] = cv2.threshold(bf, 32,256,cv2.THRESH_BINARY)
 
-        cv2.imshow("origin",255-prep)
+        # cv2.imshow("origin",255-prep)
         # cv2.imshow("blurd",blurd)
-        # cv2.imshow("bf",bf)
+        cv2.imshow("bf",bf)
         key = cv2.waitKey(1)
         if (key == 27):
             break

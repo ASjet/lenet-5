@@ -1,7 +1,7 @@
 from cv2 import cv2
 import numpy as np
 
-def resize(img,length):
+def cut(img,length):
     h,w,rgb = np.array(img).shape
     y = (h - length) // 2
     x = (w - length) // 2
@@ -26,8 +26,21 @@ def bold(img):
 
 
 def getROI(img):
+    flag = True
     x,y,w,h = cv2.boundingRect(img)
+    if(w <= 28 and h <= 28):
+        flag = False
     mid_x = x + (w//2)
     mid_y = y + (h//2)
     length = (max(w,h) // 8) * 5
-    return img[mid_y-length:mid_y+length,mid_x-length:mid_x+length]
+    return flag,img[mid_y-length:mid_y+length,mid_x-length:mid_x+length]
+
+def process(img):
+    sel = cut(img,256)
+    dgt = getDigit(sel)
+    bd = bold(dgt)
+    flag,roi = getROI(bd)
+    if(flag == False):
+        return False, None
+    res = cv2.resize(roi, (28,28), cv2.WARP_FILL_OUTLIERS)
+    return True,res

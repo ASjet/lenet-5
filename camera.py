@@ -15,14 +15,13 @@ while(cap.isOpened()):
         # Processed frame
         sel = ip.cut(frame,256)
         dgt = ip.getDigit(sel)
-        bd = ip.bold(dgt)
-        flag,roi = ip.getROI(bd)
+        flag,roi = ip.getROI(dgt)
         if(flag == False):
             continue
         x_size = cv2.resize(roi, (28,28), cv2.WARP_FILL_OUTLIERS)
         output = x_size
 
-        cv2.imshow("Captured",bd)
+        cv2.imshow("Captured",dgt)
         cv2.imshow("NNinput",x_size)
         key = cv2.waitKey(1)
         if(key == 27):

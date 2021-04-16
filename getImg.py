@@ -18,7 +18,8 @@ while(cap.isOpened()):
     [ret,frame] = cap.read()
     if(ret == True):
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        [ret,prep] = cv2.threshold(frame,80,255,cv2.THRESH_BINARY)
+        edge = cv2.Canny(frame,80,255)
+        [ret,prep] = cv2.threshold(255-edge,80,255,cv2.THRESH_BINARY)
         blurd = cv2.blur(255-prep,(3,3))
         [ret,bin] = cv2.threshold(255-prep, 128,255,cv2.THRESH_BINARY)
 

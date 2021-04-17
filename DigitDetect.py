@@ -1,4 +1,4 @@
-from cv2 import cv2
+import cv2
 import network
 import ip
 
@@ -18,9 +18,6 @@ cap = cv2.VideoCapture(camera_id)
 while(cap.isOpened()):
     [ret,frame] = cap.read()
     if(ret == True):
-        # Origin captured frame
-        # cv2.imshow("Origin",frame)
-
         # Processed frame
         sel = ip.cut(frame,256)
         dgt = ip.getDigit(sel)
@@ -30,9 +27,11 @@ while(cap.isOpened()):
         target = cv2.resize(roi, (28,28), cv2.WARP_FILL_OUTLIERS)
         input_layer = target.reshape(784,1)
 
+        # Display video
+        cv2.imshow("Origin",frame)
         cv2.imshow("Captured",sel)
         cv2.imshow("Filter",dgt)
-        cv2.imshow("ROI",target)
+        cv2.imshow("Target",target)
 
         input_layer[input_layer > 0] = 1
         print('\rNum: ',net.feedforward(input_layer),sep='',end='')

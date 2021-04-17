@@ -1,4 +1,4 @@
-from cv2 import cv2
+import cv2
 import numpy as np
 
 def cut(img,length):
@@ -10,7 +10,7 @@ def cut(img,length):
 
 def getDigit(img):
     gray = cv2.cvtColor(255-img, cv2.COLOR_BGR2GRAY)
-    edge = cv2.Canny(gray, 200, 230, (5,5))
+    edge = cv2.Canny(gray, 32, 64, (5,5))
 
     blur = cv2.blur(edge,(15,15))
     bf = cv2.boxFilter(blur, -1, (3,3),normalize=0)
@@ -19,7 +19,7 @@ def getDigit(img):
     dilate_kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE,(9,9))
     eroded = cv2.erode(bin,erode_kernel)
     res = cv2.dilate(eroded, dilate_kernel)
-    return bin
+    return res
 
 
 def getROI(img):

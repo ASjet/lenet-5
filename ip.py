@@ -10,15 +10,15 @@ def cut(img,length):
 
 def getDigit(img):
     gray = cv2.cvtColor(255-img, cv2.COLOR_BGR2GRAY)
-    edge = cv2.Canny(gray, 128, 200, (3,3))
+    edge = cv2.Canny(gray, 128, 180, (5,5))
 
-    blur = cv2.blur(edge,(13,13))
+    blur = cv2.blur(edge,(15,15))
     bf = cv2.boxFilter(blur, -1, (3,3),normalize=0)
-    [th_ret, bin] = cv2.threshold(bf,210,255,cv2.THRESH_BINARY)
-    kernel = cv2.getStructuringElement(cv2.MORPH_RECT,(5,5))
-    eroded = cv2.erode(bin,kernel)
-    res = cv2.dilate(eroded, kernel)
-
+    [th_ret, bin] = cv2.threshold(bf,230,255,cv2.THRESH_BINARY)
+    erode_kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE,(7,7))
+    dilate_kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE,(9,9))
+    eroded = cv2.erode(bin,erode_kernel)
+    res = cv2.dilate(eroded, dilate_kernel)
     return res
 
 

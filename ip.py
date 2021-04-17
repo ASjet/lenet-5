@@ -10,7 +10,7 @@ def cut(img,length):
 
 def getDigit(img):
     gray = cv2.cvtColor(255-img, cv2.COLOR_BGR2GRAY)
-    edge = cv2.Canny(gray, 128, 180, (5,5))
+    edge = cv2.Canny(gray, 200, 230, (5,5))
 
     blur = cv2.blur(edge,(15,15))
     bf = cv2.boxFilter(blur, -1, (3,3),normalize=0)
@@ -19,7 +19,7 @@ def getDigit(img):
     dilate_kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE,(9,9))
     eroded = cv2.erode(bin,erode_kernel)
     res = cv2.dilate(eroded, dilate_kernel)
-    return res
+    return bin
 
 
 def getROI(img):
@@ -34,7 +34,6 @@ def getROI(img):
     yb = min(255,mid_y+length)
     xl = max(0, mid_x-length)
     xr = min(255, mid_x+length)
-    print(yt,yb,xl,xr)
     return flag,img[yt:yb,xl:xr]
 
 
@@ -42,7 +41,7 @@ def process(img):
     sel = cut(img,256)
     dgt = getDigit(sel)
     flag,roi = getROI(dgt)
-    if(flag == False):
+    if(flag):
+        return True, cv2.resize(roi, (28,28), cv2.WARP_FILL_OUTLIERS)
+    else:
         return False, None
-    res = cv2.resize(roi, (28,28), cv2.WARP_FILL_OUTLIERS)
-    return True,res

@@ -12,14 +12,13 @@ def getDigit(img):
     gray = cv2.cvtColor(255-img, cv2.COLOR_BGR2GRAY)
     edge = cv2.Canny(gray, 128, 200, (3,3))
 
-    blur = cv2.blur(edge,(11,11))
-    bf = cv2.boxFilter(blur, -1, (9,9),0)
-    [th_ret, bin] = cv2.threshold(bf,30,255,cv2.THRESH_BINARY)
-    ero_kernel = cv2.getStructuringElement(cv2.MORPH_RECT,(3,3))
-    eroded = cv2.erode(bin,ero_kernel)
+    blur = cv2.blur(edge,(13,13))
+    bf = cv2.boxFilter(blur, -1, (3,3),normalize=0)
+    [th_ret, bin] = cv2.threshold(bf,210,255,cv2.THRESH_BINARY)
+    kernel = cv2.getStructuringElement(cv2.MORPH_RECT,(5,5))
+    eroded = cv2.erode(bin,kernel)
+    res = cv2.dilate(eroded, kernel)
 
-    bold = cv2.boxFilter(eroded,-1, (11,11), 0)
-    [th_ret, res] = cv2.threshold(bold, 64, 255, cv2.THRESH_BINARY)
     return res
 
 

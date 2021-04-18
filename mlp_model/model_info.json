@@ -71,5 +71,34 @@
         "eta:": 0.01,
         "lambda:": 10,
         "mu:": 0.5
-    }
+    },
+    "aab4e6da-a033-11eb-9995-9cb6d071e4f4": {
+        "accuracy": 9678,
+        "layer:": [
+            784,
+            70,
+            50,
+            30,
+            10
+        ],
+        "epoch:": 30,
+        "mini_batch_size:": 10,
+        "eta:": 0.01,
+        "lambda:": 5,
+        "mu:": 0.4
+    },
+    "8da4eda7-a043-11eb-85fd-9cb6d071e4f4": {
+        "accuracy": 9812,
+        "layer:": [
+            784,
+            100,
+            10
+        ],
+        "epoch:": 60,
+        "mini_batch_size:": 10,
+        "eta:": 0.1,
+        "lambda:": 5,
+        "mu:": 0.5
+    },
+
 }

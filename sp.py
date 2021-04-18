@@ -2,7 +2,7 @@ from cv2 import cv2
 import numpy as np
 import pickle
 import ip
-import network
+import mlp as network
 
 
 img_folder_path = "img/"

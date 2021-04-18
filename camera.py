@@ -9,9 +9,6 @@ cap = cv2.VideoCapture(camera_id)
 while(cap.isOpened()):
     [ret,frame] = cap.read()
     if(ret == True):
-        # Origin captured frame
-        cv2.imshow("Camera",frame)
-
         # Processed frame
         sel = ip.cut(frame,256)
         dgt = ip.getDigit(sel)
@@ -21,6 +18,7 @@ while(cap.isOpened()):
         x_size = cv2.resize(roi, (28,28), cv2.WARP_FILL_OUTLIERS)
         output = x_size
 
+        cv2.imshow("Camera",frame)
         cv2.imshow("Captured",dgt)
         cv2.imshow("NNinput",x_size)
         key = cv2.waitKey(1)

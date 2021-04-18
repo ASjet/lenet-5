@@ -1,5 +1,5 @@
-import cv2
-import network
+from cv2 import cv2
+import mlp as network
 import ip
 
 # Set VideoCaptureDeviceID

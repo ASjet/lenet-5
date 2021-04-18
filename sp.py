@@ -5,12 +5,10 @@ import ip
 import network
 
 
-model_folder_path = "nn_model/"
-model_name = "model_acc9779.json"
 img_folder_path = "img/"
-img_name = "2.png"
+img_name = "1.png"
 
-net = network.load(model_folder_path+model_name)
+net = network.load()
 
 img = cv2.imread(img_folder_path+img_name)
 sel = ip.cut(img,256)
@@ -27,12 +25,7 @@ cv2.imshow("dgt",dgt)
 cv2.imshow("resized",roi)
 cv2.imshow("x",x)
 
-nn_input = x.reshape(28*28,1)
-nn_input[nn_input > 0] = 1
-
-
-nn_output = np.argmax(net.feedforward(nn_input))
-
+nn_output = net.feedforward(x.reshape(28*28,1))
 print(nn_output)
 
 cv2.waitKey(0)

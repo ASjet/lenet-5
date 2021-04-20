@@ -100,5 +100,43 @@
         "lambda:": 5,
         "mu:": 0.5
     },
-
+    "eac8abc8-a1cb-11eb-be2b-9cb6d071e4f4": {
+        "accuracy": 9839,
+        "layer:": [
+            784,
+            100,
+            10
+        ],
+        "epoch:": 10,
+        "mini_batch_size:": 10,
+        "eta:": 0.01,
+        "lambda:": 1,
+        "mu:": 0.9
+    },
+    "d63376f7-a1d0-11eb-85ab-9cb6d071e4f4": {
+        "accuracy": 9828,
+        "layer:": [
+            784,
+            100,
+            10
+        ],
+        "epoch:": 10,
+        "mini_batch_size:": 10,
+        "eta:": 0.01,
+        "lambda:": 0.5,
+        "mu:": 0.9
+    },
+    "ba03c2bd-a1c4-11eb-82fd-9cb6d071e4f4": {
+        "accuracy": 9830,
+        "layer:": [
+            784,
+            100,
+            10
+        ],
+        "epoch:": 10,
+        "mini_batch_size:": 10,
+        "eta:": 0.05,
+        "lambda:": 1,
+        "mu:": 0.8
+    }
 }

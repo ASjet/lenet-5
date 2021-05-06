@@ -22,6 +22,10 @@ if(flag == False):
     exit(0)
 x = cv2.resize(roi, (28,28),cv2.WARP_FILL_OUTLIERS)
 
+M = cv2.getRotationMatrix2D((14,14),30,1)
+x = cv2.warpAffine(x, M, (28,28))
+print(x.shape)
+
 cv2.imshow("origin",img)
 cv2.imshow("small",sel)
 cv2.imshow("dgt",dgt)

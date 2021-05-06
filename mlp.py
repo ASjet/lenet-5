@@ -7,7 +7,7 @@ import numpy as np
 model_folder_path = "mlp_model/"
 
 # Select NN model
-model_name = "ba03c2bd-a1c4-11eb-82fd-9cb6d071e4f4"
+model_name = "eac8abc8-a1cb-11eb-be2b-9cb6d071e4f4"
 
 
 class CrossEntropyCost(object):

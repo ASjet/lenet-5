@@ -18,8 +18,9 @@ model_name = "85a4dd10-a9b4-11eb-974f-9eb6d071e4f3"
 
 def conv2D(src, kernel, res_size, biase = 0, overlapping=True, rot=False):
     if(rot):
-        conv_kernel = np.flipud(kernel)
-        conv_kernel = np.fliplr(kernel)
+        # conv_kernel = np.flipud(kernel)
+        # conv_kernel = np.fliplr(kernel)
+        conv_kernel = cv2.flip(kernel, -1)
     else:
         conv_kernel = np.array(kernel)
 
@@ -35,13 +36,17 @@ def conv2D(src, kernel, res_size, biase = 0, overlapping=True, rot=False):
     return res
 
 
-def invPool(src, kernel_size, pooled_size, res_size):
-    res = np.zeros(res_size)
+def invPool(src, kernel_size):
+    # res = np.zeros(res_size)
+    # ph, pw = pooled_size
+    # for i in range(ph):
+    #     for j in range(pw):
+    #         res[i:i+kh, j:j+kw] = src[i,j]
     kh, kw = kernel_size
-    ph, pw = pooled_size
-    for i in range(ph):
-        for j in range(pw):
-            res[i:i+kh, j:j+kw] = src[i,j]
+    srch, srcw = np.array(src).shape
+    # res = np.repeat(src, kh, 0).reshape(srch*kh,srcw)
+    # res = np.repeat(res, kw, 1).reshape(srch*kh, srcw*kw)
+    res = src.repeat(kh,0).repeat(kw,1)
     return res
 
 

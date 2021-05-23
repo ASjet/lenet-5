@@ -22,6 +22,8 @@ np_include_dir=$HOME/.local/lib/python3.7/site-packages/numpy/core/include
 # Threads this CPU has
 thread_num=4
 
+local_path=$(pwd)
+
 if [ ! -e ./.ENV_FLAG ]
 then
     sudo apt install python3 python3-pip
@@ -47,7 +49,7 @@ then
     echo "<=="
     echo "Increase vitual memory by editing /etc/dphys-swapfile CONF_SWAPSIZE=4096"
     echo "Then rerun this script"
-    touch ./.ENV_FLAG
+    touch $local_path/.ENV_FLAG
 elif [[ -e ./.ENV_FLAG && ! -e ./.CONF_FLAG ]]
 then
     git clone git://github.com/opencv/opencv ~/opencv
@@ -61,7 +63,7 @@ then
     echo "thread_num=$thread_num"
     echo "<=="
     echo "Then rerun this script"
-    touch ./.CONF_FLAG
+    touch $local_path/.CONF_FLAG
 elif [[ -e ./.ENV_FLAG && -e ./.CONF_FLAG && ! -e ./.BUILD_FLAG ]]
 then
     cd ~/opencv/build
@@ -69,7 +71,7 @@ then
     sudo make install
     echo "Everything Done!"
     python3 -c "import cv2;print('OpenCV version:',cv2.__version__)"
-    touch ./.BUILD_FLAG
+    touch $local_path/.BUILD_FLAG
 else
     echo "OpenCV had been installed!"
     python3 -c "import cv2;print('Version:',cv2.__version__)"

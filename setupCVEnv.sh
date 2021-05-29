@@ -24,7 +24,7 @@ thread_num=4
 
 local_path=$(pwd)
 
-if [ ! -e ./.ENV_FLAG ]
+if [ ! -e $local_path/.ENV_FLAG ]
 then
     sudo apt install python3 python3-pip
     sudo pip3 install numpy
@@ -50,11 +50,11 @@ then
     echo "Increase vitual memory by editing /etc/dphys-swapfile CONF_SWAPSIZE=4096"
     echo "Then rerun this script"
     touch $local_path/.ENV_FLAG
-elif [[ -e ./.ENV_FLAG && ! -e ./.CONF_FLAG ]]
+elif [[ -e $local_path/.ENV_FLAG && ! -e $local_path/.CONF_FLAG ]]
 then
     git clone git://github.com/opencv/opencv ~/opencv
-    mkdir ~/opencv/build
-    cd ~/opencv/build
+    mkdir $HOME/opencv/build
+    cd $HOME/opencv/build
     cmake -D CMAKE_BUILD_TYPE=$build_type -D CMAKE_INSTALL_PREFIX=$cmake_install_dir -D INSTALL_PYTHON_EXAMPLES=ON -D BUILD_EXAMPLES=ON -DCMAKE_SHARED_LINKER_FLAGS='-latomic' -D WITH_LIBV4L=ON PYTHON3_EXECUTABLE=$py3_exec_path PYTHON_INCLUDE_DIR=$py3_include_dir PYTHON_LIBRARY=$py3_lib_dir PYTHON3_NUMPY_INCLUDE_DIRS=$np_include_dir ..
     echo "========================================================================"
     cat /proc/cpuinfo | grep processor
@@ -64,9 +64,9 @@ then
     echo "<=="
     echo "Then rerun this script"
     touch $local_path/.CONF_FLAG
-elif [[ -e ./.ENV_FLAG && -e ./.CONF_FLAG && ! -e ./.BUILD_FLAG ]]
+elif [[ -e $local_path/.ENV_FLAG && -e $local_path/.CONF_FLAG && ! -e $local_path/.BUILD_FLAG ]]
 then
-    cd ~/opencv/build
+    cd $HOME/opencv/build
     make -j $thread_num
     sudo make install
     echo "Everything Done!"

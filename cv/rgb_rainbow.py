@@ -1,5 +1,6 @@
-from cv2 import cv2
+import cv2
 import numpy as np
+
 rgb = np.zeros((256,256,3),dtype=np.uint8)
 for i in range(256):
     rgb[i,:,[0]] = np.arange(256)

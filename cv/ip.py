@@ -1,4 +1,4 @@
-from cv2 import cv2
+import cv2
 import numpy as np
 
 def cut(img,length):
@@ -36,8 +36,10 @@ def getROI(img):
     xr = min(255, mid_x+length)
     return flag,img[yt:yb,xl:xr]
 
-
 def process(img):
+    pass
+
+def detect(img):
     sel = cut(img,256)
     dgt = getDigit(sel)
     flag,roi = getROI(dgt)

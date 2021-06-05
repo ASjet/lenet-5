@@ -1,11 +1,10 @@
-from cv2 import cv2
+import cv2
 import numpy as np
-import ip
+from cv import ip
+from cv import config
 
-# Set VideoCaptureDeviceID here
-camera_id = 0
 
-cap = cv2.VideoCapture(camera_id)
+cap = cv2.VideoCapture(config.camera_id)
 while(cap.isOpened()):
     [ret,frame] = cap.read()
     if(ret == True):

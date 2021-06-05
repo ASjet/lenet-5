@@ -9,7 +9,7 @@
 * @Copyright © 2021, ASjet
 """
 
-version = "1.6"
+__version__ = "1.6"
 
 """ Changelog
 
@@ -236,7 +236,7 @@ def printHelp():
 
 
 def printHello():
-    print("Neural Network Model Manager %s" % version)
+    print("Neural Network Model Manager %s" % __version__)
     print('Type "help" for more information.')
 
 

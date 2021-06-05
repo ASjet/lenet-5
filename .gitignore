@@ -2,11 +2,16 @@
 .CONF_FLAG
 .BUILD_FLAG
 .DS_Store
+.localized
+desktop.ini
 # Byte-compiled / optimized / DLL files
-__pycache__/
+__pycache__
 *.py[cod]
 *$py.class
 .vscode
+*.swp
+*~
+*.ipynb
 
 # C extensions
 *.so

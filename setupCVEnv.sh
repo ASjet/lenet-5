@@ -4,7 +4,7 @@
 build_type=RELEASE
 
 # CMake install prefix directory
-cmake_install_dir=/usr/local
+cmake_install_dir=/usr/local/lib/opencv4
 
 # Python3 executable path
 py3_exec_path=/usr/bin/python3
@@ -28,6 +28,8 @@ if [ ! -e $local_path/.ENV_FLAG ]
 then
     sudo apt install python3 python3-pip
     sudo pip3 install numpy
+    sudo pip3 install progress
+    sudo pip3 install matplotlib
     sudo apt install build-essential cmake git pkg-config -y
     sudo apt install libjpeg8-dev -y
     sudo apt install libtiff5-dev -y

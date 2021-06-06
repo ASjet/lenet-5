@@ -7,6 +7,9 @@ def cut(img,length):
     x = (w - length) // 2
     return img[y:y+length,x:x+length]
 
+def zoom(img, rate):
+    res = np.repeat(img, rate, 0).repeat(rate, 1)
+    return res
 
 def getDigit(img):
     gray = cv2.cvtColor(255-img, cv2.COLOR_BGR2GRAY)

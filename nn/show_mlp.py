@@ -1,6 +1,5 @@
-from cv2 import cv2
+import cv2
 import numpy as np
-# import network2 as network
 from os import system
 import gzip
 import pickle

@@ -23,7 +23,7 @@ def train(hp, model_path):
     validset = validation_data
     net = mlp.Network(hp["layer"])
     monitor = net.SGD(trainset, hp["epoch"], hp["mini_batch_size"], hp["eta"], mu=hp["mu"],
-                      evaluation_data=validation_data, lmbda=hp["lmbda"],
+                      evaluation_data=validset, lmbda=hp["lmbda"],
                       monitor_evaluation_cost=True,
                       monitor_evaluation_accuracy=True,
                       monitor_training_cost=False,
@@ -39,12 +39,13 @@ def train(hp, model_path):
     info = {
         "GUID": uid,
         "Accuracy": accuracy,
-        "Layer:": hp["layer"],
-        "Epoch:": hp["epoch"],
-        "Mini_Batch_Size:": hp["mini_batch_size"],
-        "Eta:": hp["eta"],
-        "Lambda:": hp["lmbda"],
-        "Mu:": hp["mu"]
+        "TrainSet_Size": len(trainset),
+        "Layer": hp["layer"],
+        "Epoch": hp["epoch"],
+        "Mini_Batch_Size": hp["mini_batch_size"],
+        "Eta": hp["eta"],
+        "Lambda": hp["lmbda"],
+        "Mu": hp["mu"]
     }
     with open(save_path+"info.json", 'w') as f:
         json.dump(info, f)
@@ -53,7 +54,7 @@ def train(hp, model_path):
 
 
 if __name__ == "__main__":
-    with open("../model/hyperparameters_mlp.json", 'r') as f:
+    with open("model/hyperparameters_mlp.json", 'r') as f:
         hyperparameter = json.load(f)
     uid = train(hyperparameter, model_save_path)
     print(uid)

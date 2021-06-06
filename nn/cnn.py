@@ -1,8 +1,6 @@
-import json
 import random
-import os
 
-import cv2 as cv2
+import cv2
 import numpy as np
 from numpy.core.fromnumeric import shape
 from progress.bar import IncrementalBar
@@ -69,16 +67,17 @@ class ConvPoolLayer(object):
         self.activator = activator
         self.pool_kernel = np.ones(self.pool_size) / (np.prod(self.pool_size))
 
-        self.weights1 = np.array([np.random.normal(0, 1, size=kernel_size1)
-                                  for i in range(feature_num[0])])
-        self.weights2 = np.array([np.array([np.random.normal(0, 1, size=kernel_size2)
+        self.weights1 = np.array([np.random.randn(kernel_size1[0],kernel_size1[1])
+                                  for i in range(feature_num[0])])# / np.sqrt(np.prod(self.image_size)/2)
+        self.weights2 = np.array([np.array([np.random.randn(kernel_size2[0],kernel_size2[1])
                                             for i in range(feature_num[1])])
-                                  for j in range(feature_num[0])])
+                                  for j in range(feature_num[0])])# / np.sqrt(np.prod(self.pooled_size1)/2)
 
         # self.biases1 = np.array([np.random.normal(0, 1, size=1) for i in range(feature_num[0])])
         self.biases1 = np.ones((self.feature_num[0], 1))
 
         # self.biases2 = np.array([np.array([np.random.normal(0, 1, size=1) for i in range(feature_num[1])])
+        #                         for j in range(feature_num[0])])
         self.biases2 = np.ones(self.feature_num)
 
     def __repr__(self):
@@ -249,7 +248,7 @@ class Network(object):
                 evaluation_accuracy.append(accuracy)
                 print("Accuracy on evaluation data: {} / {}".format(
                     self.accuracy(evaluation_data), n_data))
-            if(inc_cnt >= 5):
+            if(inc_cnt >= 3):
                 break
             print()
         return evaluation_cost, evaluation_accuracy, \
@@ -321,7 +320,7 @@ class Network(object):
             activations.append(activation)
 
         # With CrossEntropy as cost and Softmax as activator
-        delta = self.cost.delta(zs[-1], activations[-1], y) - y
+        delta = self.cost.delta(zs[-1], activations[-1], y)
 
         nabla_b[-1] = delta
         nabla_w[-1] = np.dot(delta, activations[-2].transpose())
@@ -334,7 +333,7 @@ class Network(object):
             nabla_w[-l] = np.dot(delta, activations[-l-1].transpose())
 
         delta_i = np.dot(self.weights[0].transpose(),
-                         delta) * self.activator.derivate(x)
+                         delta)# * self.activator.derivate(x)
         return (delta_i, nabla_w, nabla_b)
 
     def accuracy(self, data, convert=False):

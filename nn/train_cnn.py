@@ -27,8 +27,8 @@ def train(hp, model_path):
 
     training_data, validation_data, test_data = mnist_loader.load_data_wrapper(
         hp["dataset_id"])
-    trainset = training_data[0:1000]
-    validset = validation_data[0:1000]
+    trainset = training_data
+    validset = validation_data
 
     net = cnn.Network(hp["feature_num"], hp["image_size"],
                       hp["kernel_size1"], hp["kernel_size2"], hp["pool_size"], FCsize)
@@ -66,40 +66,6 @@ def train(hp, model_path):
 
     return uid
 
-
-def showKernel(net):
-    with gzip.open("../data/test.pkl.gz", 'rb') as f:
-        test_set = pickle.load(f)
-    for x, y in test_set:
-        src = np.reshape(x, hyperparameter["image_size"])
-        convd1 = net.cpl.conv(src, 1)
-        poold1 = net.cpl.pooling(convd1, 1)
-        convd2 = net.cpl.conv(poold1, 2)
-        poold2 = net.cpl.pooling(convd2, 2)
-
-        for i, l1 in enumerate(convd1):
-            c1 = l1 if (i == 0) else np.vstack((c1, l1))
-
-        for i, l2 in enumerate(poold1):
-            p1 = l2 if (i == 0) else np.vstack((p1, l2))
-
-        for i, l3 in enumerate(convd2):
-            for j, ll3 in enumerate(l3):
-                c2 = ll3 if (i == 0 and j == 0) else np.vstack((c2, ll3))
-
-        for i, l4 in enumerate(poold2):
-            for j, ll4 in enumerate(l4):
-                p2 = ll4 if (i == 0 and j == 0) else np.vstack((p2, ll4))
-
-        cv2.imshow("src", src)
-        cv2.imshow("convd1", c1)
-        cv2.imshow("poold1", p1)
-        cv2.imshow("convd2", c2)
-        cv2.imshow("poold2", p2)
-        key = cv2.waitKey(0)
-        if(key == 27):  # Type ESC to break
-            break
-    cv2.destroyAllWindows()
 
 
 if __name__ == "__main__":

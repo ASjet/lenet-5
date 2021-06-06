@@ -9,30 +9,33 @@
 * @Copyright © 2021, ASjet
 """
 
-__version__ = "1.6"
+from cv import recognition
+from nn import *
+from sys import meta_path
+import pickle
+import shutil
+import json
+import os
+__version__ = "1.3"
 
 """ Changelog
 
-@Version 1.6
-    fix bugs
-    optimize training options
-
-@Version 1.5
-    Refactor whole project structure
-
-@Version 1.4
-    Add train command
-
 @Version 1.3
-    Fix bugs
-    Refactor functions
+    add cam command
+    add shw command
 
 @Version 1.2
+    fix bugs
+    optimize training options
+    Refactor whole project structure
+    Add train command
+
+@Version 1.1
+    Fix bugs
+    Refactor functions
     Add help
     Refactor model path tree structure
     Rename commands
-
-@Version 1.1
     Add mnt command
     Add tst command
 
@@ -44,12 +47,6 @@ __version__ = "1.6"
 
 """
 
-
-import os
-import json
-import shutil
-import pickle
-from nn import *
 
 model_path = "model/"
 cfg_name = "cfg.dat"
@@ -70,6 +67,13 @@ class Model(object):
         if(not empty):
             self.chtype(model_type)
             self.chname(model_name)
+
+    def loadIndex(self):
+        with open(model_path+"index",'r') as f:
+            index = f.read().splitlines()
+        self.type = index[0]
+        if(len(index) == 2):
+            self.name = index[1]
 
     def getModels(self):
         self.models = []
@@ -124,15 +128,26 @@ class Model(object):
     def printAll(self):
         self.getModels()
         if(self.chkEmpty()):
-            print("  ID|Accuracy|Layers|TrainSize|MBS|Epoch|     Eta|Lambda| Mu")
-            for i, model in enumerate(self.models):
-                info = self.getInfo(model)
-                fmtstring = ('>' if model == self.name else ' ') + \
-                    "%3d|%8d|%s|%9d|%3d|%5d|%.6f|%.4f|%.1f"
-                print(fmtstring % (i, info["Accuracy"], info["Feature_Num"], info["TrainSet_Size"],
-                                info["Mini_Batch_Size"], info["Epoch"], info["Eta"], info["Lambda"], info["Mu"]))
-            print("Count: %d" % len(self.models))
-            return True
+            if(self.type == "cnn"):
+                print("  ID|Accuracy|TrainSize|MBS|Epoch|     Eta|Lambda| Mu|Layers")
+                for i, model in enumerate(self.models):
+                    info = self.getInfo(model)
+                    fmtstring = ('>' if model == self.name else ' ') + \
+                        "%3d|%8d|%9d|%3d|%5d|%.6f|%.4f|%.1f|%s"
+                    print(fmtstring % (i, info["Accuracy"], info["TrainSet_Size"], info["Mini_Batch_Size"],
+                            info["Epoch"], info["Eta"], info["Lambda"], info["Mu"], info["Feature_Num"]))
+                print("Count: %d" % len(self.models))
+                return True
+            elif(self.type == "mlp"):
+                print("  ID|Accuracy|TrainSize|MBS|Epoch|     Eta|Lambda| Mu|Layers")
+                for i, model in enumerate(self.models):
+                    info = self.getInfo(model)
+                    fmtstring = ('>' if model == self.name else ' ') + \
+                        "%3d|%8d|%9d|%3d|%5d|%.6f|%.4f|%.1f|%s"
+                    print(fmtstring % (i, info["Accuracy"], info["TrainSet_Size"], info["Mini_Batch_Size"],
+                                     info["Epoch"], info["Eta"], info["Lambda"], info["Mu"], info["Layer"]))
+                print("Count: %d" % len(self.models))
+                return True
         return False
 
     def chmodel(self):
@@ -175,6 +190,7 @@ def train(model_type):
         print("Set hyperparameters to begin")
         print("[0]Origin MNIST dataset.")
         print("[1]Rotation-Expanded MNIST dataset.")
+        print("[2]Small dataset for test.(5000/1000)")
         set_id = input("(1/9)Choose dataset[%d]:" % hp["dataset_id"])
         if(set_id != ''):
             hp["dataset_id"] = int(set_id)
@@ -213,9 +229,47 @@ def train(model_type):
         if(lmbda != ''):
             hp["lmbda"] = float(lmbda)
         uid = train_cnn.train(hp, model_path)
-        info = model.getInfo(uid)
-        for key, value in info.items():
-            print(key, value, sep=':')
+    elif(model_type == "mlp"):
+        with open(model_path+hpname_mlp, 'r') as f:
+            hp = json.load(f)
+        # Dataset
+        print("Set hyperparameters to begin")
+        print("[0]Origin MNIST dataset.")
+        print("[1]Rotation-Expanded MNIST dataset.")
+        print("[2]Small dataset for test.(5000/1000)")
+        set_id = input("(1/7)Choose dataset[%d]:" % hp["dataset_id"])
+        if(set_id != ''):
+            hp["dataset_id"] = int(set_id)
+        # Mini-Batch size
+        mbs = input("(2/7)Mini-Batch size[%d]:" % hp["mini_batch_size"])
+        if(mbs != ''):
+            hp["mini_batch_size"] = int(mbs)
+        # Layers
+        layer = input("(3/7)Layers[%s]:" % str(hp["layer"]))
+        if(layer != ''):
+            hp["layer"] = [int(l) for l in layer.split(' ')]
+        # Epoch
+        epoch = input("(4/7)Epoch[%d]:" % hp["epoch"])
+        if(epoch != ''):
+            hp["epoch"] = int(epoch)
+        # Eta
+        eta = input("(5/7)Eta[%f]:" % hp["eta"])
+        if(eta != ''):
+            hp["eta"] = float(eta)
+        # Mu
+        mu = input("(6/7)Mu[%f]:" % hp["mu"])
+        if(mu != ''):
+            hp["mu"] = float(mu)
+        # Lambda
+        lmbda = input("(7/7)Lambda[%f]:" % hp["lmbda"])
+        if(lmbda != ''):
+            hp["lmbda"] = float(lmbda)
+        uid = train_mlp.train(hp, model_path)
+
+    info = model.getInfo(uid)
+    for key, value in info.items():
+        print(key, value, sep=':')
+
 
 def printHelp():
     print("\nUsage:")
@@ -227,8 +281,10 @@ def printHelp():
     print("  rm [ID]\tRemove specified model. Currently using model will be removed when ignoring parameter.")
     print("  sel [ID]\tSelect model to use by specifing model ID. Get all model information by ignoring parameter.")
     print("  tst [ID]\tTest specified model by TestSet. Using currently using model when ignoring parameter.")
-    print("  mnt [ID]\tShow monitor of specified model. Show monitor of currently using model when ignoring parameter.")
+    print("  mnt [ID]\tShow monitor curve of specified model. Show monitor of currently using model when ignoring parameter.")
+    print("  shw\t\tPrint model conv-kernel and convd images.")
     print("  chm\t\tChange model type.")
+    print("  cam\t\tUsing camera to recognize handwritten digits.")
     print("  type\t\tShow current model type.")
     print("  exit\t\tExit manager and save data.")
     print("  help\t\tShow help for commands.")
@@ -301,6 +357,17 @@ if __name__ == "__main__":
                                 continue
                         model.rm(sel)
 
+                    elif(cmd[0] == "shw"):
+                        if(model.type == "cnn"):
+                            if(len(cmd) == 1):
+                                sel = model.name
+                            else:
+                                id = int(cmd[1])
+                                if(model.chkID(id)):
+                                    sel = model.models[id]
+                            show_cnn.showKernel(sel)
+                            show_cnn.showRes(sel)
+
                     elif(cmd[0] == "tst"):
                         if(len(cmd) == 1):
                             sel = model.name
@@ -311,9 +378,11 @@ if __name__ == "__main__":
                             else:
                                 continue
                         print(sel)
-                        path = model_path + model.type + '/' + sel + "/model.pkl.gz"
-                        hits, all = show_cnn.testNN(show_cnn.test, path)
+                        hits, all = show_cnn.testNN(sel)
                         print("Accuracy on testset: %d / %d" % (hits, all))
+
+                    elif(cmd[0] == "cam"):
+                        recognition.camera()
 
                     elif(cmd[0] == "chm"):
                         model.chmodel()

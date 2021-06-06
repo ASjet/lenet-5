@@ -1,0 +1,1 @@
+{"GUID": "2f283dbb-c5ff-11eb-96ff-9cb6d071e4f4", "Accuracy": 9024, "TrainSet_Size": 50000, "Feature_Num": [6, 2], "Kernel_Size1": [5, 5], "Kernel_Size2": [5, 5], "Pool_size": [2, 2], "FCL_Size": [192, 10], "Epoch": 30, "Mini_Batch_Size": 5, "Eta": 0.001, "Lambda": 0.8, "Mu": 0.5}

@@ -1,12 +1,12 @@
 {
     "dataset_id" : 0,
     "image_size" : [28,28],
-    "feature_num" : [6,2],
+    "feature_num" : [5,5],
     "kernel_size1" : [5,5],
     "kernel_size2" : [5,5],
     "pool_size" : [2,2],
-    "epoch" : 60,
-    "eta" : 0.01,
+    "epoch" : 10,
+    "eta" : 0.001,
     "mini_batch_size" : 10,
     "mu" : 0.5,
     "lmbda" : 0.8

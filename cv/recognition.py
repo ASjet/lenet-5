@@ -2,6 +2,7 @@ import os
 import pickle
 import gzip
 import cv2
+import numpy as np
 
 from nn import cnn, mlp
 from cv import config, ip
@@ -20,7 +21,7 @@ def workflow(img, model):
     flag, obj = ip.detect(prep)
     if(flag == True):
         cv2.imshow("NNInput",obj)
-        result = model.feedforward(img)
+        result = np.argmax(model.feedforward(obj/255.0))
         print('\rNum: ',result, sep='', end=' ')
 
 
@@ -40,17 +41,19 @@ def camera():
     print()
 
 
-def static(img_path):
-    net = loadModel()
-    with os.scandir(img_path) as imgs:
-        for img in imgs:
-            if(img.is_file):
-                frame = cv2.imread(img)
-                workflow(frame, net)
-    key = cv2.waitKey(1)
+def static(img, net):
+    workflow(img, net)
+    key = cv2.waitKey(0)
     if(key == 27):
         cv2.destroyAllWindows()
 
 if __name__ == "__main__":
     # camera()
-    static(config.img_path)
+    net = loadModel()
+    # with os.scandir(config.img_path) as imgs:
+    #     for img in imgs:
+    #         if(img.is_file):
+    #             frame = cv2.imread(img.path)
+    img = cv2.imread("img/3.png")
+    cv2.imshow("origin", img)
+    static(img, net)

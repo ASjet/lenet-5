@@ -1,4 +1,5 @@
 import cv2
+import numpy as np
 from flask import Flask, render_template, Response
 from nn import cnn
 from cv import config, ip, recognition
@@ -9,13 +10,10 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    dgt = 1
     return render_template('index.html', digit=dgt)
 
 
 def gen():
-    # video_path = 'S:/ITFS/Movies&Drama/Short/ALIKE.mp4'
-    # vid = cv2.VideoCapture(video_path)
     global dgt
     net = recognition.loadModel()
     cap = cv2.VideoCapture(config.camera_id)
@@ -25,7 +23,7 @@ def gen():
             prep = ip.process(frame)
             got, obj = ip.detect(prep)
             if(got):
-                dgt = net.feedforward(obj)
+                dgt = np.argmax(net.feedforward(obj/255.0))
                 image = cv2.imencode('.jpg', frame)[1].tobytes()
                 yield (b'--frame\r\n'
                     b'Content-Type: image/jpeg\r\n\r\n' + image + b'\r\n')

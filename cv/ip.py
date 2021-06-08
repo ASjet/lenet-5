@@ -22,7 +22,7 @@ def getDigit(img):
     dilate_kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE,(7,7))
     eroded = cv2.erode(bin,erode_kernel)
     res = cv2.dilate(eroded, dilate_kernel)
-    return bin
+    return res
 
 
 def getROI(img):
@@ -40,12 +40,12 @@ def getROI(img):
     return flag,img[yt:yb,xl:xr]
 
 def process(img):
-    pass
-
-def detect(img):
     sel = cut(img,256)
     dgt = getDigit(sel)
-    flag,roi = getROI(dgt)
+    return dgt
+
+def detect(img):
+    flag,roi = getROI(img)
     if(flag):
         return True, cv2.resize(roi, (28,28), cv2.WARP_FILL_OUTLIERS)
     else:

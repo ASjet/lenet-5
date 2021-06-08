@@ -67,9 +67,9 @@ class ConvPoolLayer(object):
         self.activator = activator
         self.pool_kernel = np.ones(self.pool_size) / (np.prod(self.pool_size))
 
-        self.weights1 = np.array([np.random.randn(kernel_size1[0],kernel_size1[1])
+        self.weights1 = np.array([np.random.normal(0, 1, size=kernel_size1)
                                   for i in range(feature_num[0])])# / np.sqrt(np.prod(self.image_size)/2)
-        self.weights2 = np.array([np.array([np.random.randn(kernel_size2[0],kernel_size2[1])
+        self.weights2 = np.array([np.array([np.random.normal(0, 1, size=kernel_size2)
                                             for i in range(feature_num[1])])
                                   for j in range(feature_num[0])])# / np.sqrt(np.prod(self.pooled_size1)/2)
 

@@ -5,6 +5,7 @@
 .localized
 desktop.ini
 # Byte-compiled / optimized / DLL files
+data/mnist_expanded_rotation.pkl.gz
 __pycache__
 *.py[cod]
 *$py.class

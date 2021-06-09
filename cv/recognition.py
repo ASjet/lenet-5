@@ -22,7 +22,7 @@ def workflow(img, model):
     if(flag == True):
         cv2.imshow("NNInput",obj)
         result = np.argmax(model.feedforward(obj/255.0))
-        print('\rNum: ',result, sep='', end=' ')
+        print('\rNum: ',result, sep=' ', end='')
 
 
 def camera():

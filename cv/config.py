@@ -7,6 +7,8 @@ model_path = "model/"
 # Set static image path here
 img_path = "img/"
 
+value = 100
+
 def readIndex():
     with open(model_path+"index",'r') as f:
         model_type, model_name = f.read().splitlines()

@@ -20,11 +20,13 @@ def gen():
     while (cap.isOpened()):
         ret, frame = cap.read()
         if(ret):
-            prep = ip.process(frame)
+            sel = ip.cut(frame, 256)
+            prep = ip.getDigit(sel)
             got, obj = ip.detect(prep)
             if(got):
                 dgt = np.argmax(net.feedforward(obj/255.0))
-                image = cv2.imencode('.jpg', frame)[1].tobytes()
+                print('\rNum: ',dgt, sep=' ', end='')
+                image = cv2.imencode('.jpg', sel)[1].tobytes()
                 yield (b'--frame\r\n'
                     b'Content-Type: image/jpeg\r\n\r\n' + image + b'\r\n')
 
@@ -35,4 +37,4 @@ def video_feed():
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host='0.0.0.0')

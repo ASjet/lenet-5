@@ -2,23 +2,29 @@
 """
 * Neural Network Model Manager
 * Fri Jun 04 20:38:14 CST 2021
-* @Version 1.6
+* @Version 1.4
 * @Auther ASjet
 * @Email Aryan.ITFS@iCloud.com
 * @License GNU GPLv3
 * @Copyright © 2021, ASjet
 """
 
-from cv import recognition
-from nn import *
-from sys import meta_path
 import pickle
 import shutil
 import json
 import os
-__version__ = "1.3"
+from sys import meta_path
+
+from cv import recognition
+from nn import *
+import web
+
+__version__ = "1.4"
 
 """ Changelog
+
+@Version 1.4
+    add web command
 
 @Version 1.3
     add cam command
@@ -285,6 +291,7 @@ def printHelp():
     print("  shw\t\tPrint model conv-kernel and convd images.")
     print("  chm\t\tChange model type.")
     print("  cam\t\tUsing camera to recognize handwritten digits.")
+    print("  web\t\tWatch camera frame through web stream.")
     print("  type\t\tShow current model type.")
     print("  exit\t\tExit manager and save data.")
     print("  help\t\tShow help for commands.")
@@ -380,6 +387,9 @@ if __name__ == "__main__":
                         print(sel)
                         hits, all = show_cnn.testNN(sel)
                         print("Accuracy on testset: %d / %d" % (hits, all))
+
+                    elif(cmd[0] == "web"):
+                        web.app.run(host='0.0.0.0')
 
                     elif(cmd[0] == "cam"):
                         recognition.camera()

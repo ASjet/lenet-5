@@ -1,7 +1,7 @@
 {
     "dataset_id" : 0,
     "epoch" : 30,
-    "layer" : [784, 30,16, 10],
+    "layer" : [784, 10],
     "eta" : 0.01,
     "mini_batch_size" : 10,
     "mu" : 0.9,

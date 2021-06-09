@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+from cv import config
 
 def cut(img,length):
     h,w,rgb = np.array(img).shape
@@ -12,17 +13,43 @@ def zoom(img, rate):
     return res
 
 def getDigit(img):
-    gray = cv2.cvtColor(255-img, cv2.COLOR_BGR2GRAY)
-    edge = cv2.Canny(gray, 100, 230, (5,5))
-
-    blur = cv2.blur(edge,(15,15))
-    bf = cv2.boxFilter(blur, -1, (3,3),normalize=0)
-    [th_ret, bin] = cv2.threshold(bf,230,255,cv2.THRESH_BINARY)
-    erode_kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE,(7,7))
-    dilate_kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE,(7,7))
-    eroded = cv2.erode(bin,erode_kernel)
-    res = cv2.dilate(eroded, dilate_kernel)
-    return res
+    gray = cv2.cvtColor(255 - img, cv2.COLOR_BGR2GRAY)
+    gray = cv2.GaussianBlur(gray, (9, 9), 0)
+    im_gray1 = np.array(gray)
+    avg_gray = np.average(im_gray1)
+    im_gray1 = np.where(im_gray1[:, :] < config.value, 0, 255)               #灰度图转黑白阈值
+    gray3 = np.array(im_gray1, dtype='uint8')
+    edge = cv2.Canny(gray, 100, 230)                                                #边缘识别阈值
+    contours, hierarchy = cv2.findContours(gray3, cv2.RETR_LIST,
+                                           cv2.CHAIN_APPROX_SIMPLE)
+    whit = np.zeros_like(edge)
+    whit2 = np.copy(whit)
+    for i in range(len(contours)):
+        area = cv2.contourArea(contours[i], True)
+        if (abs(area) > 500):                                                       #初步过滤小杂点
+            whit2 = cv2.drawContours(whit2, contours, i, (255, 255, 255), 20)
+    cv2.imshow("cut", whit2)
+    contours, hierarchy = cv2.findContours(whit2, cv2.RETR_TREE,
+                                           cv2.CHAIN_APPROX_NONE)
+    whit3 = np.copy(whit)
+    n = len(contours)
+    for i in range(n):
+        area = cv2.contourArea(contours[i], True)
+        if (np.min(contours[i]) < 30 or np.max(contours[i] > 240)):
+            continue
+        if (abs(area) > 2000):                                                      #只画出图像主体
+            whit3 = cv2.drawContours(whit3, contours, i, (255, 255, 255), -1)
+            j = i
+            while (hierarchy[0][j][2] > -1):
+                cv2.drawContours(whit3, contours, hierarchy[0][j][2],
+                                 (0, 0, 0), -1)
+                z = hierarchy[0][j][2]
+                while (hierarchy[0][z][0] > -1):
+                    cv2.drawContours(whit3, contours, hierarchy[0][z][0],
+                                     (0, 0, 0), -10)
+                    z = hierarchy[0][z][0]
+                j = hierarchy[0][j][2]
+    return whit3
 
 
 def getROI(img):

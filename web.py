@@ -10,7 +10,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    return render_template('index.html', digit=dgt)
+    return render_template('index.html')
 
 
 def gen():
@@ -24,11 +24,14 @@ def gen():
             prep = ip.getDigit(sel)
             got, obj = ip.detect(prep)
             if(got):
+                img = obj
                 dgt = np.argmax(net.feedforward(obj/255.0))
-                print('\rNum: ',dgt, sep=' ', end='')
-                image = cv2.imencode('.jpg', sel)[1].tobytes()
-                yield (b'--frame\r\n'
-                    b'Content-Type: image/jpeg\r\n\r\n' + image + b'\r\n')
+            else:
+                img = prep
+            print('\rNum: ',dgt, sep=' ', end='')
+            image = cv2.imencode('.jpg', sel)[1].tobytes()
+            yield (b'--frame\r\n'
+            b'Content-Type: image/jpeg\r\n\r\n' + image + b'\r\n')
 
 
 @app.route('/video_feed')

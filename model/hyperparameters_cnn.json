@@ -1,7 +1,7 @@
 {
     "dataset_id" : 0,
     "image_size" : [28,28],
-    "feature_num" : [5,5],
+    "feature_num" : [12,6],
     "kernel_size1" : [5,5],
     "kernel_size2" : [5,5],
     "pool_size" : [2,2],

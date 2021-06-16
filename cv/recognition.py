@@ -16,7 +16,10 @@ def loadModel():
 
 
 def workflow(img, model):
-    prep = ip.process(img)
+    cutted = ip.cut(img, 256)
+    prep = ip.getDigit(cutted)
+    #prep = ip.process(img)
+    cv2.imshow("cutted",cutted)
     cv2.imshow("PreProcessed",prep)
     flag, obj = ip.detect(prep)
     if(flag == True):
@@ -48,12 +51,12 @@ def static(img, net):
         cv2.destroyAllWindows()
 
 if __name__ == "__main__":
-    # camera()
-    net = loadModel()
+    camera()
+    #net = loadModel()
     # with os.scandir(config.img_path) as imgs:
     #     for img in imgs:
     #         if(img.is_file):
     #             frame = cv2.imread(img.path)
-    img = cv2.imread("img/3.png")
-    cv2.imshow("origin", img)
-    static(img, net)
+    #img = cv2.imread("img/3.png")
+    #cv2.imshow("origin", img)
+    #static(img, net)

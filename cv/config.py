@@ -7,7 +7,7 @@ model_path = "model/"
 # Set static image path here
 img_path = "img/"
 
-value1 = 115
+value = 150
 
 
 def readIndex():

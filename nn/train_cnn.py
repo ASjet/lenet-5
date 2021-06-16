@@ -69,7 +69,7 @@ def train(hp, model_path):
 
 
 if __name__ == "__main__":
-    with open("../model/hyperparameters_cnn.json", 'r') as f:
+    with open("model/hyperparameters_cnn.json", 'r') as f:
         hyperparameter = json.load(f)
     uid = train(hyperparameter, model_save_path)
     print(uid)

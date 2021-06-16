@@ -30,6 +30,7 @@ then
     sudo pip3 install numpy
     sudo pip3 install progress
     sudo pip3 install matplotlib
+    sudo pip3 install flask
     sudo apt install build-essential cmake git pkg-config -y
     sudo apt install libjpeg8-dev -y
     sudo apt install libtiff5-dev -y

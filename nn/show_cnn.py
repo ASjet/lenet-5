@@ -24,7 +24,7 @@ def loadModel(model_name):
 
 def testNN(model_name,show_num=False):
 
-    with gzip.open(model_path,'rb') as f:
+    with gzip.open(model_path+"cnn/"+model_name+"/model.pkl.gz",'rb') as f:
         net = pickle.load(f)
     net = loadModel(model_name)
     testset = loadData()
@@ -68,6 +68,7 @@ def testNN(model_name,show_num=False):
                 cv2.imshow("digit", graph_page)
                 key = cv2.waitKey(0)
                 if(key == 27): # Type ESC to break
+                    cv2.destroyAllWindows()
                     break
                 cnt = 0
             else:
